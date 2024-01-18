@@ -1,5 +1,11 @@
 # Picture-in-picture selection screenshot
 
+Work in progress !
+
+## Current state
+
+![Alt Text](usage.gif)
+
 ## ressources
 
 This allows you to populate PiP with pretty much anything: [document picture-in-picture](https://wicg.github.io/document-picture-in-picture/)  
