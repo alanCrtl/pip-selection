@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document PiP Example</title>
+</head>
+<body>
+    <div id="player-container">
+      <div id="player">
+        <video id="video" src="marry.mp4" controls></video>
+        <!-- More player elements here. -->
+      </div>
+    </div>
+    <input type="button" onclick="enterPiP();" value="Enter PiP" />
+
+<script>
+// Handle to the picture-in-picture window.
+let pipWindow = null;
+
+function enterPiP() {
+  const player = document.querySelector('#player');
+  const playerContainer = document.querySelector('#player-container');
+
+  // Set the width/height so the window is properly sized to the video.
+  const pipOptions = {
+    width: player.clientWidth,
+    height: player.clientHeight,
+  };
+
+  documentPictureInPicture.requestWindow(pipOptions).then(pipWin => {
+    pipWindow = pipWin;
+
+    // Style remaining container to imply the player is in PiP.
+    playerContainer.classList.add('pip-mode');
+
+    // Add player to the PiP window.
+    pipWindow.document.body.append(player);
+
+    // Listen for the PiP closing event to put the video back.
+    pipWindow.addEventListener('pagehide', onLeavePiP.bind(pipWindow), { once: true });
+  });
+}
+
+// Called when the PiP window has closed.
+function onLeavePiP() {
+  if (this !== pipWindow) {
+    return;
+  }
+
+  // Remove PiP styling from the container.
+  const playerContainer = document.querySelector('#player-container');
+  playerContainer.classList.remove('pip-mode');
+
+  // Add the player back to the main window.
+  const player = pipWindow.document.querySelector('#player');
+  playerContainer.append(player);
+
+  pipWindow = null;
+}
+</script>
+</body>
+</html>

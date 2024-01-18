@@ -1,0 +1,20 @@
+{
+    "manifest_version": 2,
+    "name": "Rectangle Selector",
+    "version": "1.0",
+    "description": "Select a rectangle area on any site.",
+    "permissions": ["activeTab", "storage"],
+    "browser_action": {
+      "default_icon": {
+        "16": "icon.png"
+      },
+      "default_title": "Rectangle Selector"
+    },
+    "content_scripts": [
+      {
+        "matches": ["<all_urls>"],
+        "js": ["content.js"]
+      }
+    ]
+  }
+  
