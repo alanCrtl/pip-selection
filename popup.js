@@ -1,3 +1,4 @@
+// sends a message to content.js to start screenshot mode on button press within the popup
 document.addEventListener('DOMContentLoaded', function () {
     var button = document.getElementById('screenshotButton');
 

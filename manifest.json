@@ -3,7 +3,7 @@
     "name": "PiP Screenshot Extension",
     "version": "1.0",
     "description": "Capture a selected area and display it in Picture-in-Picture mode.",
-    "permissions": ["activeTab", "tabs"],
+    "permissions": ["activeTab", "tabs","commands"],
     "browser_action": {
       "default_popup": "popup.html",
       "default_icon": "icon.png",
@@ -13,11 +13,20 @@
         "scripts": ["background.js"],
         "persistent": false
       },
+      "commands": {
+        "startScreenshotModeShortcut": {
+          "suggested_key": {
+            "default": "Ctrl+Shift+S"
+          },
+          "description": "Start Screenshot Mode"
+        }
+      },
     "content_scripts": [
       {
         "matches": ["<all_urls>"],
-        "js": ["content.js", "html2canvas.js"]
+        "js": ["content.js"]
       }
     ]
+    
   }
   
