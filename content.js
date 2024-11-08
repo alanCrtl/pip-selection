@@ -199,8 +199,8 @@ function handleMouseUp() {
             }) 
             .then(() => {
                 // for debug
-                openImageInNewTab(s)
-                openImageInNewTab(c)
+                // openImageInNewTab(s)
+                // openImageInNewTab(c)
             })
             .finally(() => {
                 exitScreenshotmode()
