@@ -25,6 +25,5 @@ And it's ugly ofcourse
 
 ## TODO:
 
-- Is there a way to get better quality screenshot?
 - add css to popup.html
 - remove opacity layer from screenshot

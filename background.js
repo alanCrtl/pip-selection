@@ -1,6 +1,6 @@
 // // Background code is code that lives in the context of the browser
 
-// // returns visible tab as imageURL format
+// returns visible tab as imageURL format
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     if (request.action === 'captureVisibleTab') {
         chrome.tabs.captureVisibleTab(null, { format: 'png', quality: 100 }, dataUrl => {
@@ -20,6 +20,7 @@ chrome.commands.onCommand.addListener(function(command) {
     }
 });
 
+// start screenshot mode when clicking on extension icon
 chrome.browserAction.onClicked.addListener(function(tab) {
     // alert("Extension icon clicked!");
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {

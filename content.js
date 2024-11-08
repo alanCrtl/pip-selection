@@ -10,9 +10,10 @@ let isSelecting = false;
 let startX, startY, endX, endY;
 let startClientX, startClientY, endClientX, endClientY
 let overlay;
-
 // console.log('PiP screenshot loaded');
-// ==================================================================== 
+
+
+
 // start screenshot mode when the button in the popup or the shortcut is pressed 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     if (request.action === "startScreenshotMode") {
@@ -46,8 +47,10 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     }
 });
 
-// ==================================================================== 
+
 // ===== screenshot mode reset functions =====
+
+
 function exitScreenshotmode() {
     // reenable link hover
     enableLinkHover()
@@ -95,8 +98,10 @@ function enableLinkHover() {
     });
 }
 
-// ==================================================================== 
+
 // ===== Rectangle drawing and clearing =====
+
+
 function drawSelectionRectangle(startX, startY, endX, endY) {
     // Remove any existing rectangles
     const existingRect = document.getElementById('rectangle-selector');
@@ -140,8 +145,10 @@ function resetSelectionCoordinates() {
     endY = 0;
 }
 
-// ==================================================================== 
+
 // ===== Mouse events =====
+
+
 function handleMouseDown(event) {
     // Prevent text selection
     event.preventDefault();
@@ -165,6 +172,7 @@ function handleMouseMove(event) {
 function handleMouseUp() {
     if (isSelecting) {
         isSelecting = false;
+
         // remove overlay, and clear box for clean screenshot
         if (overlay) {
             overlay.remove();
@@ -191,8 +199,8 @@ function handleMouseUp() {
             }) 
             .then(() => {
                 // for debug
-                // openImageInNewTab(s)
-                // openImageInNewTab(c)
+                openImageInNewTab(s)
+                openImageInNewTab(c)
             })
             .finally(() => {
                 exitScreenshotmode()
@@ -203,9 +211,12 @@ function handleMouseUp() {
     }
 }
 
-// ==================================================================== 
+
 // ======== Image functions ==========
-function openImageInNewTab(imageDataURL) { // for debug purposes
+
+
+// for debug purposes
+function openImageInNewTab(imageDataURL) { 
     const newTab = window.open();
     newTab.document.write('<html><head><title>Image Preview</title></head><body>');
     newTab.document.write(`<img src="${imageDataURL}" alt="Cropped Image">`);
@@ -226,31 +237,32 @@ function captureVisiblePage() {
 }
 
 // https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/drawImage
+
 function cropImage(selectedImage, scrollX, scrollY) {
     return new Promise((resolve, reject) => {
-        console.log('cropping image');
         const canvas = document.createElement('canvas');
         const context = canvas.getContext('2d');
-
-        var img = new Image();
+        const img = new Image();
         img.src = selectedImage;
 
         img.onload = function () {
-            // Set canvas dimensions to match the selected area
-            const pixelRatio = window.devicePixelRatio || 1;
-            const sx = Math.min(startClientX, endClientX) * pixelRatio;
-            const sy = Math.min(startClientY, endClientY) * pixelRatio;
-            const swidth = Math.abs(endX - startX) * pixelRatio;
-            const sheight = Math.abs(endY - startY) * pixelRatio;
-            const dwidth = swidth;
-            const dheight = sheight;
+            // Get the actual screen-to-image coordinate transformation
+            const imageScale = img.naturalWidth / window.innerWidth;
+            
+            // Apply the scale to coordinates instead of dimensions
+            const sx = Math.min(startClientX, endClientX) * imageScale;
+            const sy = Math.min(startClientY, endClientY) * imageScale;
+            const swidth = Math.abs(endX - startX) * imageScale;
+            const sheight = Math.abs(endY - startY) * imageScale;
+
+            // Set canvas to the actual image dimensions
             canvas.width = swidth;
             canvas.height = sheight;
             
-            console.log(`cropping attrs (sx, sy, width, height): ${[sx, sy, swidth, sheight]}`)
-            // Draw the selected area onto the canvas
-            context.drawImage(img, sx, sy, swidth, sheight, 0, 0, dwidth, dheight);
-            const croppedImageDataUrl = canvas.toDataURL();
+            context.imageSmoothingEnabled = false;
+            context.drawImage(img, sx, sy, swidth, sheight, 0, 0, swidth, sheight);
+
+            const croppedImageDataUrl = canvas.toDataURL('image/png', 1.0);
             resolve(croppedImageDataUrl);
         };
     });
