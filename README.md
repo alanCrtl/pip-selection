@@ -19,7 +19,7 @@ To capture visible tab using chrome api --- [here](https://developer.chrome.com/
 
 ## Explanation
 
-I honestly have a lot cases where I just wanted to screenshot some code or text and
+I honestly have had a lot cases where I just wanted to screenshot some code or text and
 keep it in a "always on top" window but didn't find anything sastifying so I made this.
 
 ## TODO:
