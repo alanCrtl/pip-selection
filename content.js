@@ -17,7 +17,7 @@ let overlay;
 // start screenshot mode when the button in the popup or the shortcut is pressed 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     if (request.action === "startScreenshotMode") {
-        console.log('screenshot mode ON');
+        // console.log('screenshot mode ON');
         // Disable pointer events for links
         disableLinkHover();
         // events to draw selection and take screenshot on mouseup
@@ -135,7 +135,7 @@ function clearSelectionBox() {
     const rectangleSelector = document.getElementById('rectangle-selector');
     rectangleSelector.style.width = '0';
     rectangleSelector.style.height = '0';
-    console.log('removed seclection box')
+    // console.log('removed seclection box')
 }
 
 function resetSelectionCoordinates() {
@@ -177,7 +177,7 @@ function handleMouseUp() {
         if (overlay) {
             overlay.remove();
             overlay = null;
-            console.log('removed overlay')
+            // console.log('removed overlay')
         }
         clearSelectionBox();
 
@@ -186,7 +186,7 @@ function handleMouseUp() {
         const scrollY = window.scrollY;
 
         // Capture the visible tab, crop it, display it in pip window, exit screenshot mode.
-        console.log(`coords of selection: sx ex sy ey = [${[startX, endX, startY, endY]}]`);
+        // console.log(`coords of selection: sx ex sy ey = [${[startX, endX, startY, endY]}]`);
         captureVisiblePage()
             .then(selectedImage => {
                 cropped = cropImage(selectedImage, scrollX, scrollY)
@@ -270,13 +270,13 @@ function cropImage(selectedImage, scrollX, scrollY) {
 
 function showImageInPiP(imageDataURL) {
     return new Promise((resolve, reject) => {
-        console.log('putting image in PiP');
+        // console.log('putting image in PiP');
         const img = document.createElement('img');
         img.src = imageDataURL;
 
         // Listen for the 'load' event before attempting to get the dimensions
         img.onload = function () {
-            console.log(`Image dimensions: [${img.width}, ${img.height}]`);
+            // console.log(`Image dimensions: [${img.width}, ${img.height}]`);
             // Increase pip window a tiny bit further than the images dimensions
             // cause otherwise scrollbar show up and it's bad
             extend_dimensions_px = 60;
